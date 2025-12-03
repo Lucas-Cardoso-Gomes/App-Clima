@@ -372,11 +372,45 @@ class TelaAdmin extends StatelessWidget {
                     if (idUsuario != meuId)
                       IconButton(
                         icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () {
-                          FirebaseFirestore.instance
-                              .collection('usuarios')
-                              .doc(idUsuario)
-                              .delete();
+                        onPressed: () async {
+                          bool confirmar = await showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text("Confirmar exclusão"),
+                              content: const Text(
+                                "Tem certeza que deseja excluir este usuário? Isso apagará a conta de acesso também.",
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, false),
+                                  child: const Text("Cancelar"),
+                                ),
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, true),
+                                  child: const Text("Excluir"),
+                                ),
+                              ],
+                            ),
+                          ) ?? false;
+
+                          if (confirmar) {
+                            try {
+                              await FirebaseFirestore.instance
+                                  .collection('usuarios')
+                                  .doc(idUsuario)
+                                  .delete();
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Usuário removido."),
+                                ),
+                              );
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("Erro ao excluir: $e")),
+                              );
+                            }
+                          }
                         },
                       ),
                   ],
