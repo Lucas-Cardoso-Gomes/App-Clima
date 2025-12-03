@@ -407,6 +407,7 @@ class TelaAdmin extends StatelessWidget {
                                 ),
                               );
                             } catch (e) {
+                              debugPrint("Erro na Cloud Function deleteUser: $e");
                               // Fallback: Se a função falhar (ex: não implantada), tenta deletar só do Firestore
                               // e avisa o usuário.
                               try {
@@ -417,7 +418,7 @@ class TelaAdmin extends StatelessWidget {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
-                                      "Aviso: Usuário removido do banco, mas pode não ter sido removido do Auth. Erro: $e",
+                                      "Aviso: Usuário removido via Firestore. A conta de Auth deve ser removida automaticamente (verifique o Trigger).",
                                     ),
                                   ),
                                 );
