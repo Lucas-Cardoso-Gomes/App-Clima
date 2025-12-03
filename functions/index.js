@@ -17,6 +17,7 @@ exports.deleteAuthUser = functions.firestore
         await admin.auth().deleteUser(userId);
         console.log(`Sucesso: Usuário ${userId} removido do Firebase Auth.`);
       } catch (error) {
+        // Se o erro for 'auth/user-not-found', significa que já foi deletado ou não existe.
         if (error.code === 'auth/user-not-found') {
             console.log(`Usuário ${userId} não encontrado no Auth (já deletado?).`);
             return;

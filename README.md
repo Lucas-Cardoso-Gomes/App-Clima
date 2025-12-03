@@ -34,21 +34,3 @@ Para garantir que ao apagar um usuário do Firestore, ele também seja apagado d
    ```
 
 A função `deleteAuthUser` será acionada automaticamente sempre que um documento for excluído da coleção `usuarios` no Firestore.
-
-### Importante: Deploy das Cloud Functions
-
-Para que a exclusão do usuário do Auth ocorra após a exclusão no aplicativo (Firestore), é **obrigatório** fazer o deploy da Cloud Function `deleteAuthUser`. Essa função roda em segundo plano.
-
-1.  **Instale as dependências da função:**
-    ```bash
-    cd functions
-    npm install
-    cd ..
-    ```
-
-2.  **Faça o deploy das funções:**
-    ```bash
-    firebase deploy --only functions
-    ```
-
-**Nota:** Como a exclusão ocorre em segundo plano (back-end), pode haver um pequeno atraso entre a exclusão no app e o sumiço do usuário no painel do Authentication.
