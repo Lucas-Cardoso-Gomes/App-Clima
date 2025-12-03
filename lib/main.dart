@@ -396,40 +396,25 @@ class TelaAdmin extends StatelessWidget {
 
                           if (confirmar) {
                             try {
-                              // Tenta chamar a Cloud Function para exclusão completa
-                              await FirebaseFunctions.instance
-                                  .httpsCallable('deleteUser')
-                                  .call({'uid': idUsuario});
+                              await FirebaseFirestore.instance
+                                  .collection('usuarios')
+                                  .doc(idUsuario)
+                                  .delete();
 
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text("Usuário excluído com sucesso!"),
+                                  content: Text(
+                                      "Usuário excluído. A conta de acesso será removida automaticamente em instantes."),
                                 ),
                               );
-                            } catch (e) {
-                              // Fallback: Se a função falhar (ex: não implantada), tenta deletar só do Firestore
-                              // e avisa o usuário.
-                              try {
-                                await FirebaseFirestore.instance
-                                    .collection('usuarios')
-                                    .doc(idUsuario)
-                                    .delete();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      "Aviso: Usuário removido do banco, mas pode não ter sido removido do Auth. Erro: $e",
-                                    ),
+                            } catch (firestoreError) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    "Erro ao excluir usuário: $firestoreError",
                                   ),
-                                );
-                              } catch (firestoreError) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      "Erro ao excluir usuário: $firestoreError",
-                                    ),
-                                  ),
-                                );
-                              }
+                                ),
+                              );
                             }
                           }
                         },
