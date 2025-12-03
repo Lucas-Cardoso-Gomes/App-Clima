@@ -34,5 +34,3 @@ Para garantir que ao apagar um usuário do Firestore, ele também seja apagado d
    ```
 
 A função `deleteAuthUser` será acionada automaticamente sempre que um documento for excluído da coleção `usuarios` no Firestore.
-
-Além disso, foi implementada uma função `deleteUser` que pode ser chamada diretamente pelo aplicativo. Para que a exclusão funcione corretamente a partir do botão "Excluir" no app, é **obrigatório** fazer o deploy dessas funções.
