@@ -379,7 +379,7 @@ class TelaAdmin extends StatelessWidget {
                             builder: (context) => AlertDialog(
                               title: const Text("Confirmar exclusão"),
                               content: const Text(
-                                "Tem certeza que deseja excluir este usuário? Isso apagará a conta de acesso também.",
+                                "Tem certeza que deseja excluir este usuário?",
                               ),
                               actions: [
                                 TextButton(
