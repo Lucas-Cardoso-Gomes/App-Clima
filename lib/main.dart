@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -372,11 +373,65 @@ class TelaAdmin extends StatelessWidget {
                     if (idUsuario != meuId)
                       IconButton(
                         icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () {
-                          FirebaseFirestore.instance
-                              .collection('usuarios')
-                              .doc(idUsuario)
-                              .delete();
+                        onPressed: () async {
+                          bool confirmar = await showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text("Confirmar exclusão"),
+                              content: const Text(
+                                "Tem certeza que deseja excluir este usuário? Isso apagará a conta de acesso também.",
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, false),
+                                  child: const Text("Cancelar"),
+                                ),
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, true),
+                                  child: const Text("Excluir"),
+                                ),
+                              ],
+                            ),
+                          ) ?? false;
+
+                          if (confirmar) {
+                            try {
+                              // Tenta chamar a Cloud Function para exclusão completa
+                              await FirebaseFunctions.instance
+                                  .httpsCallable('deleteUser')
+                                  .call({'uid': idUsuario});
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Usuário excluído com sucesso!"),
+                                ),
+                              );
+                            } catch (e) {
+                              // Fallback: Se a função falhar (ex: não implantada), tenta deletar só do Firestore
+                              // e avisa o usuário.
+                              try {
+                                await FirebaseFirestore.instance
+                                    .collection('usuarios')
+                                    .doc(idUsuario)
+                                    .delete();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      "Aviso: Usuário removido do banco, mas pode não ter sido removido do Auth. Erro: $e",
+                                    ),
+                                  ),
+                                );
+                              } catch (firestoreError) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      "Erro ao excluir usuário: $firestoreError",
+                                    ),
+                                  ),
+                                );
+                              }
+                            }
+                          }
                         },
                       ),
                   ],
