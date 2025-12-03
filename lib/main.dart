@@ -342,8 +342,9 @@ class TelaAdmin extends StatelessWidget {
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('usuarios').snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData)
+          if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
+          }
 
           var docs = snapshot.data!.docs;
           String meuId = FirebaseAuth.instance.currentUser!.uid;
