@@ -417,7 +417,7 @@ class TelaAdmin extends StatelessWidget {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
-                                      "Aviso: Usuário removido do banco, mas pode não ter sido removido do Auth. Erro: $e",
+                                      "Aviso: Usuário removido via Firestore. A conta de Auth deve ser removida automaticamente (verifique o Trigger).",
                                     ),
                                   ),
                                 );
