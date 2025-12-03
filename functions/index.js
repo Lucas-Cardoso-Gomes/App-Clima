@@ -29,11 +29,6 @@ exports.deleteAuthUser = functions.firestore
 /**
  * Função chamável (Callable) para excluir um usuário diretamente do app.
  * Exclui do Auth e do Firestore.
- *
- * SECURITY WARNING: Esta função permite que QUALQUER usuário autenticado exclua
- * qualquer outro usuário. Isso foi mantido para compatibilidade com o protótipo atual
- * onde a tela de Admin é acessível a todos. Em produção, verifique claims de admin:
- * if (context.auth.token.admin !== true) throw new HttpsError('permission-denied', ...);
  */
 exports.deleteUser = functions.https.onCall(async (data, context) => {
   // Verifica se o usuário está autenticado
@@ -52,11 +47,8 @@ exports.deleteUser = functions.https.onCall(async (data, context) => {
     );
   }
 
-  // SECURITY NOTE: Aqui deveria haver uma verificação de permissão (ex: apenas Admin).
-  // Como o app atual expõe a gestão para todos, permitimos a operação.
-
   try {
-    console.log(`Solicitação de exclusão para o usuário: ${uid} feita por ${context.auth.uid}`);
+    console.log(`Solicitação de exclusão para o usuário: ${uid}`);
 
     // 1. Excluir do Firebase Authentication
     await admin.auth().deleteUser(uid);
