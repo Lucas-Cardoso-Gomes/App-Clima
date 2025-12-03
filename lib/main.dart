@@ -407,6 +407,7 @@ class TelaAdmin extends StatelessWidget {
                                 ),
                               );
                             } catch (e) {
+                              debugPrint("Erro na Cloud Function deleteUser: $e");
                               // Fallback: Se a função falhar (ex: não implantada), tenta deletar só do Firestore
                               // e avisa o usuário.
                               try {
