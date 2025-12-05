@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'tela_financeiro.dart';
 
 void main() async {
   try {
@@ -252,6 +253,17 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (c) => const TelaAdmin()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.attach_money),
+              title: const Text("Financeiro"),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (c) => const TelaFinanceiro()),
                 );
               },
             ),
