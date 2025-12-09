@@ -10,12 +10,12 @@ void main() async {
   try {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
-        apiKey: "AIzaSyBYTixMaVhfHjyNLE0JbGJlf19RUrBlM_k",
-        authDomain: "trabalho-final-fernando-e9c15.firebaseapp.com",
-        projectId: "trabalho-final-fernando-e9c15",
-        storageBucket: "trabalho-final-fernando-e9c15.firebasestorage.app",
-        messagingSenderId: "210219132596",
-        appId: "1:210219132596:web:e9094847dacbd7c95099e1",
+        apiKey: "",
+        authDomain: "",
+        projectId: "",
+        storageBucket: "",
+        messagingSenderId: "",
+        appId: "",
       ),
     );
   } catch (e) {
